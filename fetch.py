@@ -2,13 +2,14 @@ import json
 import os
 import tempfile
 
+
 from bs4 import BeautifulSoup
 import git
 from nltk.tokenize import wordpunct_tokenize
 from pylatexenc.latex2text import LatexNodes2Text
 import requests
 
-import constants
+import src.constants as constants
 
 
 def fname_sort_key(fname: str) -> int:
@@ -24,6 +25,7 @@ def fetch_dfp() -> None:
 
     First two lines of code from this [StackOverflow question/answer](https://stackoverflow.com/questions/51239168/how-to-download-single-file-from-a-git-repository-using-python).
     """
+    print("Fetching DFP...")
     # Create temporary dir
     t = tempfile.mkdtemp()
     # Clone into temporary dir
@@ -43,10 +45,11 @@ def fetch_dfp() -> None:
 
 def fetch_kjb() -> None:
     """Fetch King James Bible, tokenize, and save into JSON."""
+    print("Fetching KJB...")
     # Fetch, get text
     url = constants.URL_KJB
     response = requests.get(url)
-    soup = BeautifulSoup(response.text)
+    soup = BeautifulSoup(response.text, features=[])
     text = soup.get_text()
     # Select proper text
     start_text = "The Old Testament"

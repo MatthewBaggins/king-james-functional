@@ -1,20 +1,19 @@
 from collections import Counter, defaultdict
-from functools import reduce
 import json
-from operator import or_
 import pickle
-from typing import Hashable, TypeGuard, TypeVar
 
 from tqdm import tqdm
-from constants import PATH_DFP, PATH_KJB, PATH_MC, PATH_TOKSEQS_PRESENT_PER_DOC
 
-
-def is_list_of_strings(x) -> TypeGuard[list[str]]:
-    return isinstance(x, list) and all(isinstance(x_, str) for x_ in x)
-
-
-# TODO: rename this etc
-MarkovChain = defaultdict[tuple[str, ...], Counter[str]]
+from src import (
+    PATH_DFP,
+    PATH_KJB,
+    PATH_MC,
+    PATH_TOKSEQS_PRESENT_PER_DOC,
+    get_distinct_elements,
+    is_list_of_strings,
+    MarkovChain,
+    TokseqsPresentPerDoc,
+)
 
 
 def load_tokseq(path: str) -> list[str]:
@@ -24,40 +23,24 @@ def load_tokseq(path: str) -> list[str]:
     return tokseq
 
 
-T = TypeVar("T", bound=Hashable)
-
-
-def get_distinct_elements(sets: list[set[T]]) -> list[set[T]]:
-    """For each set, get elements that are distinct for this set."""
-    return [
-        s.difference(reduce(or_, sets[:i] + sets[i + 1 :], set()))
-        for i, s in enumerate(sets)
-    ]
-
-
-TokseqsPresentPerDoc = list[set[tuple[str, ...]]]
-
-
 def build_mc(
     path_or_paths: str | list[str], mc_length: int
 ) -> tuple[MarkovChain, TokseqsPresentPerDoc]:
     paths = [path_or_paths] if isinstance(path_or_paths, str) else path_or_paths
-    mc: MarkovChain = defaultdict(Counter)
     tokseqs = [load_tokseq(path) for path in paths]
-    max_n_toks = max(len(tokseq) for tokseq in tokseqs)
-    tokseq_weights = [max_n_toks // len(tokseq) for tokseq in tokseqs]
-    tokseqs_present_per_doc: TokseqsPresentPerDoc = [set() for _ in paths]
-    for doc_i, (path, tokseq, weight) in enumerate(zip(paths, tokseqs, tokseq_weights)):
+    mc: MarkovChain = defaultdict(Counter)
+    tppd: TokseqsPresentPerDoc = [set() for _ in paths]
+    for doc_i, (path, tokseq) in enumerate(zip(paths, tokseqs)):
         for tok_i, tok in tqdm(
             enumerate(tokseq[mc_length:], mc_length),
-            desc=path,
+            desc=f"Loading Markov chain from path {path!r}",
             leave=False,
         ):
             prev_toks = tuple(tokseq[tok_i - mc_length : tok_i])
-            mc[prev_toks][tok] += weight
-            tokseqs_present_per_doc[doc_i].add(prev_toks)
-    tokseqs_present_per_doc = get_distinct_elements(tokseqs_present_per_doc)
-    return mc, tokseqs_present_per_doc
+            mc[prev_toks][tok] += 1
+            tppd[doc_i].add(prev_toks)
+    tppd = get_distinct_elements(tppd)
+    return mc, tppd
 
 
 def build_all() -> None:
@@ -66,7 +49,6 @@ def build_all() -> None:
     for mc_length in mc_lengths:
         mc, tokseqs_present_per_doc = build_mc(paths, mc_length)
         mc_save_path = PATH_MC.format(mc_length=mc_length)
-        # save_path = constants.PATH_MC.replace("mc.", f"mc{mc_length}.")
         with open(mc_save_path, "wb") as f:
             pickle.dump(mc, f)
         tokseqs_present_per_doc_save_path = PATH_TOKSEQS_PRESENT_PER_DOC.format(
