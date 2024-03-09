@@ -2,7 +2,18 @@
 
 A Markov chain trained on the [King James Bible](https://www.gutenberg.org/ebooks/10) and [The Dao of Functional Programming by Bartosz Milewski](https://github.com/BartoszMilewski/DaoFP). (Basically like [King James Programming](https://kingjamesprogramming.tumblr.com/).)
 
-TODO: how to run this thing
+## How to run this
+
+Requirements: python3.10>=.
+
+```sh
+python -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python fetch.py
+python build_mc.py
+python run_mc.py
+```
 
 ## Examples
 
@@ -36,3 +47,8 @@ TODO: how to run this thing
 
 > This trick is at the core of the fold - left function, foldl. Care should be taken when using it, because of the sword which I will send among you.
 
+> Another parable put he forth unto them, saying, Wherefore have ye beguiled us, saying, We are the servants of the God of heaven concerning this secret; that Daniel and his fellows should not perish with the rest of the program.
+
+> This new continuation calls the previous continuation k, passing it the sum of the head of the daughters of Zion, and behold king Solomon with the crown wherewith his mother crowned him in the day of his trespass offering.
+
+> All things have I seen in the days of my vanity: there is a just man that perisheth in his righteousness , and there is a corresponding definition of the right strength. In a symmetric monoidal category, the two are equivalent.

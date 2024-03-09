@@ -33,7 +33,7 @@ def build_mc(
     for doc_i, (path, tokseq) in enumerate(zip(paths, tokseqs)):
         for tok_i, tok in tqdm(
             enumerate(tokseq[mc_length:], mc_length),
-            desc=f"Loading Markov chain from path {path!r}",
+            desc=f"({mc_length=}) Loading Markov chain from path {path!r}",
             leave=False,
         ):
             prev_toks = tuple(tokseq[tok_i - mc_length : tok_i])

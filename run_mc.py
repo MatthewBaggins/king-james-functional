@@ -4,7 +4,6 @@ import sys
 from typing import NamedTuple
 
 from colorama import Fore, Style
-from tqdm import tqdm
 
 from src import (
     PATH_MC,
@@ -80,11 +79,12 @@ def main() -> None:
         subchain1 = chain[sig_change_i - 50 : sig_change_i]
         subchain2 = chain[sig_change_i : sig_change_i + 50]
         print(
-            Fore.RED,
-            concat_tokseq(subchain1),
-            Fore.GREEN,
-            concat_tokseq(subchain2),
-            Style.RESET_ALL,
+            Fore.RED
+            + concat_tokseq(subchain1)
+            + " "
+            + Fore.GREEN
+            + concat_tokseq(subchain2)
+            + Style.RESET_ALL,
         )
 
 
