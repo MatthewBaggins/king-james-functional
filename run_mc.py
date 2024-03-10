@@ -79,12 +79,9 @@ def main() -> None:
         subchain1 = chain[sig_change_i - 50 : sig_change_i]
         subchain2 = chain[sig_change_i : sig_change_i + 50]
         print(
-            Fore.RED
-            + concat_tokseq(subchain1)
-            + " "
-            + Fore.GREEN
-            + concat_tokseq(subchain2)
-            + Style.RESET_ALL,
+            concat_tokseq(
+                [Fore.RED, *subchain1, Fore.GREEN, *subchain2, Style.RESET_ALL]
+            )
         )
 
 
