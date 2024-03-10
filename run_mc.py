@@ -1,3 +1,4 @@
+from argparse import ArgumentParser
 import pickle
 import random
 import sys
@@ -34,26 +35,30 @@ def load_mc_and_tppd(mc_length: int) -> tuple[MarkovChain, TokseqsPresentPerDoc]
 
 
 class Args(NamedTuple):
-    mc_length: int = MC_LENGTH
-    n_seqs: int = 5
-    seed: int | float | None = None
+    seed: float | None
+    mc_length: int
+    n_seqs: int
 
 
 def parse_args() -> Args:
-    match len(sys.argv):
-        case 1:
-            return Args()
-        case 2:
-            return Args(int(sys.argv[1]))
-        case 3:
-            return Args(int(sys.argv[1]), int(sys.argv[2]))
-        case _:
-            return Args(int(sys.argv[1]), int(sys.argv[2]), float(sys.argv[3]))
+    parser = ArgumentParser()
+    parser.add_argument("seed", type=float, nargs="?", default=None, help="Random seed")
+    parser.add_argument(
+        "--mc_length", type=int, default=MC_LENGTH, help="Markov chain length"
+    )
+    parser.add_argument(
+        "--n_seqs",
+        type=int,
+        default=5,
+        help="Number of mixed-book sequences to be generated",
+    )
+    parsed_args = parser.parse_args()
+    return Args(**vars(parsed_args))
 
 
 def main() -> None:
     # Parse args, initialize random seed
-    mc_length, n_seqs, seed = parse_args()
+    seed, mc_length, n_seqs = parse_args()
     random.seed(seed)
 
     # Load data, run chain

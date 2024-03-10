@@ -22,7 +22,7 @@ def get_distinct_elements(sets: list[set[T]]) -> list[set[T]]:
     ]
 
 
-WHITESPACE_FOLLOWED_CHARS = ",.:;)]}’”"
+WHITESPACE_FOLLOWED_CHARS = ",.!?:;)]}’”"
 NON_WHITESPACE_CHARS = "([{‘“"
 QUOTATION_MARKS = "'\""
 COLOR_CHARS = f"{Fore.RED}{Fore.GREEN}"
@@ -41,60 +41,51 @@ def get_tok_concat_sep(prev_toks: str, next_tok: str) -> str:
     if not prev_toks:
         return ""
 
-    last_tok = prev_toks[-1]
-    snd_last_tok = prev_toks[-2] if len(prev_toks) >= 1 else ""
+    last_char = prev_toks[-1]
+    snd_last_char = prev_toks[-2] if len(prev_toks) >= 1 else ""
 
     # Always just append '
-    if next_tok == "'":
+    if next_tok.startswith("'"):
         return ""
 
     # If [\d+:\d+] (Bible chapter numberings)
-    if last_tok == ":" and snd_last_tok.isdigit() and next_tok.isdigit():
+    if last_char == ":" and snd_last_char.isdigit() and next_tok[0].isdigit():
         return ""
 
     # If last token is a single quote and it looks like English '-phrase
-    if last_tok == "'" and next_tok in "snt":
+    if last_char == "'" and next_tok in "snt":
         return ""
 
     # If last token was a double quote, determine whether it's a starting or ending quote
-    if last_tok == '"':
+    if next_tok.startswith('"'):
         match_start = PAT_START_QUOTE.search(prev_toks)
         match_end = PAT_END_QUOTE.search(prev_toks)
         start_pos = match_start.start() if match_start is not None else 0
         end_pos = match_end.start() if match_end is not None else 0
         if start_pos < end_pos:
+            return " "
+        return ""
+
+    if last_char == '"':
+        if snd_last_char.isspace():
             return ""
         return " "
-        # match (match_start, match_end):
-        #     case (None, _):
-        #         return ""
-        #     case (_, None):
-        #         return " "
-        #     case (_, _):
-        #         if match_start.start() < match_end.start():
-        #             return ""
-        #         return " "
-
-        # if match_start is None and match_end is not None:
-        #     return ""
-        # if match_start and match_end is None:
-        #     return " "
 
     # If next_tok is one always followed by whitespace
-    if next_tok in WHITESPACE_FOLLOWED_CHARS:
+    if next_tok[0] in WHITESPACE_FOLLOWED_CHARS:
         return ""
 
     # If last_tok is one always followed by whitespace
-    if last_tok in WHITESPACE_FOLLOWED_CHARS:
+    if last_char in WHITESPACE_FOLLOWED_CHARS:
         return " "
 
     # If a character that should heuristically never be followed by whitespace
-    if last_tok in NON_WHITESPACE_CHARS:
+    if last_char in NON_WHITESPACE_CHARS:
         return ""
 
     # If standard quotation mark
-    if last_tok in QUOTATION_MARKS:
-        if snd_last_tok.isspace():
+    if last_char in QUOTATION_MARKS:
+        if snd_last_char.isspace():
             return " "
         return ""
     return " "

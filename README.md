@@ -52,3 +52,21 @@ python run_mc.py
 > This new continuation calls the previous continuation k, passing it the sum of the head of the daughters of Zion, and behold king Solomon with the crown wherewith his mother crowned him in the day of his trespass offering.
 
 > All things have I seen in the days of my vanity: there is a just man that perisheth in his righteousness , and there is a corresponding definition of the right strength. In a symmetric monoidal category, the two are equivalent.
+
+> And in the synagogue there was a man, whose appearance was like the appearance of the chambers which were toward the north, as long as they exist, are isomorphic
+
+> In reality, because of Haskell's laziness, the execution of I / O is interleaved with the rest of the wise men of Babylon, Whosoever shall read this writing, and make known to him the interpretation.
+
+> And he took butter, and milk, and the calf which he had dressed, and set it before thee. And he said, Behold, now I know that there is no set of all sets.
+
+> 25:41 And she arose, and bowed herself on her face to the ground, and stamped upon them. 8:11 And the dove came in to him in the evening; and, lo, thus have they done in the rest of the book, so you may safely skip it on first reading.
+
+> if both hom - objects on the left are True, then the right hand side must also be True. (It can't be False, because there is no shepherd: and they became meat to all the beasts of the field, and as the green herb, as the grass on the housetops, and as corn blasted before it be grown up.
+
+> And the way before them was like the appearance of the chambers which were toward the north, as long as they are data structures and not functions, can be serialized and send along the wire.
+
+> This trick is at the core of the fold-left funcion, foldl. Care should be taken when using it, because of the sword that I will send among them.
+
+> O virgin daughter of Babylon, sit on the ground: there is no throne, O daughter of the Chaldeans: for thou shalt no more be haughty because of my holy mountain.3:12 I know that there is no set of all sets.
+
+> 
